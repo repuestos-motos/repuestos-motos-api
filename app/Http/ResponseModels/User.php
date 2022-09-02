@@ -12,6 +12,7 @@ class User
     public $tel;
     public $email;
     public $iibb;
+    public $isSeller = false;
 
 
     public function __construct(

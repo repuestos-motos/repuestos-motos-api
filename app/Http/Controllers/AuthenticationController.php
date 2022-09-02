@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Http\ResponseModels\User as UserResponse;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Models\Seller;
+use App\Http\ResponseModels\User as UserResponse;
+use App\Http\ResponseModels\SellerUser as SellerUserResponse;
 
 class AuthenticationController extends Controller
 {
@@ -52,9 +53,23 @@ class AuthenticationController extends Controller
         try {
             $userName = $request->input('userName');
             $password = $request->input('password');
-            return response()->json(null);
+            $user = Seller::where('NOMUSUARIO', $userName)
+                ->where('CLAVE', $password)
+                ->where('HABILITADO', 'S')
+                ->first();
+
+            if ($user) {
+                $user = new SellerUserResponse(
+                    $user->IDVENDEDOR,
+                    $user->NOMBRE,
+                    $user->COMISION
+                );
+            } else {
+                return response('', 403);
+            }
+            return response()->json($user);
         } catch (Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
+            Log::error('SellerLogin error: ' . $e->getMessage());
             return response('', 500);
         }
         

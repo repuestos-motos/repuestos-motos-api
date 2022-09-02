@@ -31,5 +31,10 @@ Route::prefix('products')->group(function() {
     Route::get('list', 'App\Http\Controllers\ProductController@GetProducts')
         ->middleware('authentication.check');
     Route::get('image', 'App\Http\Controllers\ProductController@GetProductImage');
-        
+});
+
+Route::prefix('orders')->group(function() {
+    Route::post('', 'App\Http\Controllers\ProductController@GetProducts')
+        ->middleware('authentication.check');
+    Route::get('image', 'App\Http\Controllers\ProductController@GetProductImage');
 });

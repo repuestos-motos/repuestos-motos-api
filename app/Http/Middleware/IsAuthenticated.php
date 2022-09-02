@@ -18,7 +18,7 @@ class IsAuthenticated
     {
         if (JWToken::VerifyToken($request->header('Authorization'))) {
             $response = $next($request);
-            return $response->header('Authorization', JWToken::CreateToken());
+            return $response->header('Authorization', JWToken::CreateToken())->header('Access-Control-Expose-Headers', 'Authorization');
         }
         return response('', 403);
     }
