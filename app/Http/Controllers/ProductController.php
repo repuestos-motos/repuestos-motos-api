@@ -47,7 +47,7 @@ class ProductController extends Controller
             $userId = $request->input('userId');
     
             // Get user
-            $user = User::find($userId);
+            $user = Client::find($userId);
     
             if (!$user) {
                 return ResponseModel::GetErrorResponse('Usuario no encontrado', null, 404);

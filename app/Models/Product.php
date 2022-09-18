@@ -4,7 +4,6 @@ namespace App\Models;
 
 use JsonSerializable;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\ResponseModels\Product as ProductListResponseModel;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
