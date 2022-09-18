@@ -74,4 +74,28 @@ class OrderController extends Controller
             ); 
         }
     }
+
+    public function OrdersList(Request $request, $clientId) {
+        try {
+            if (!Client::clientExist($clientId)) {
+                throw new HttpException(400, 'Id de cliente no encontrado');
+            }
+            return ResponseModel::GetSuccessfullResponse(
+                Order::GetOrders($clientId)
+            );
+        } catch (HttpException $e) {
+            return ResponseModel::GetErrorResponse(
+                null,
+                $e->getMessage(),
+                $e->getStatusCode()
+            );
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return ResponseModel::GetErrorResponse(
+                null,
+                'Se produjo un error obtener la lista de pedidos',
+                500
+            );
+        }
+    }
 }

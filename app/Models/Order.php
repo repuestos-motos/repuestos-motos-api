@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use JsonSerializable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -135,5 +136,16 @@ class Order extends Model implements JsonSerializable
             Log::error('Order::AddItem ' . $e->getMessage());
             throw new HttpException(500, 'Se produjo un error agregando un producto a su orden');
         }
+    }
+
+    /**
+     * Return all the orders for a client
+     * @param clientId Client id
+     * @return Collection A collection with all the orders found
+     */
+    public static function GetOrders($clientId) {
+        return Order::where('IDCLIENTE', '=', $clientId)
+            ->orderBy('FECHA', 'desc')
+            ->get();
     }
 }

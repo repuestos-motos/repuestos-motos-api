@@ -40,5 +40,4 @@ Route::prefix('orders')->group(function() {
     Route::get('list/{clientId}', 'App\Http\Controllers\OrderController@OrdersList');
     Route::get('detail/{orderId}', 'App\Http\Controllers\OrderController@OrderDetail');
 
-
 });
