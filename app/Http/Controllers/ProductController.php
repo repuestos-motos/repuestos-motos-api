@@ -77,7 +77,7 @@ class ProductController extends Controller
             $response = (object)[];
             
             DB::beginTransaction();
-            if (Client::clientExist($order->clientId)) {
+            if (!Client::clientExist($order->clientId)) {
                 throw new HttpException(404, 'Cliente no válido');
             }
             if (isset($order->sellerId) && !Seller::sellerExist($order->sellerId)) {

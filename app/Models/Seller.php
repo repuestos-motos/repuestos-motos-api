@@ -15,7 +15,10 @@ class Seller extends Model
      * @return boolean True/False indicating if the seller exists
      */
     public static function sellerExist($id) {
-        $seller = Seller::find($id);
-        return !!Seller::find($id);
+        if (is_numeric($id) && $id >= 0) {
+            $seller = Seller::where('IDVENDEDOR', '=', $id)->get();
+            return count($seller) > 0;
+        }
+        return false;
     }
 }

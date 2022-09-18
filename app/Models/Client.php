@@ -60,7 +60,11 @@ class Client extends Model
      * Checks if a client id exist
      * @return boolean True/False indicating if the client exists
      */
-    public static function clientExist($clientId) {
-        return !!!Client::find($clientId);
+    public static function clientExist($id) {
+        if (is_numeric($id) && $id >= 0) {
+            $client = Client::where('IDCLIENTE', '=', $id)->get();
+            return count($client) > 0;
+        }
+        return false;
     }
 }
