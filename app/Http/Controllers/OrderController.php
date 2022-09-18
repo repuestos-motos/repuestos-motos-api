@@ -98,4 +98,31 @@ class OrderController extends Controller
             );
         }
     }
+
+    public function OrderDetail(Request $request, $orderId) {
+        try {
+            if (!is_numeric($orderId) || $orderId < 0) {
+                throw new HttpException(400, 'Id de pedido incorrecto');
+            }
+            $order = Order::find($orderId);
+            if (!$order) {
+                throw new HttpException(404, 'Pedido no encontrado');
+            }
+            $order->LoadItems();
+            return ResponseModel::GetSuccessfullResponse($order);
+        } catch (HttpException $e) {
+            return ResponseModel::GetErrorResponse(
+                null,
+                $e->getMessage(),
+                $e->getStatusCode()
+            );
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return ResponseModel::GetErrorResponse(
+                null,
+                'Se produjo un error obtener el pedido',
+                500
+            );
+        }
+    }
 }

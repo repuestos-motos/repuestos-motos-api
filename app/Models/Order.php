@@ -139,6 +139,15 @@ class Order extends Model implements JsonSerializable
     }
 
     /**
+     * Load the order items from the database
+     */
+    public function LoadItems() {
+        $this->orderItems = OrderItem::where('IDPEDIDO', '=', $this->orderId())
+            ->get()
+            ->toArray();
+    }
+
+    /**
      * Return all the orders for a client
      * @param clientId Client id
      * @return Collection A collection with all the orders found
