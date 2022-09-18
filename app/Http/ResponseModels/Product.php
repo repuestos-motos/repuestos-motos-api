@@ -4,6 +4,7 @@ namespace App\Http\ResponseModels;
 
 class Product
 {
+    public $porductId;
     public $title;
     public $description;
     public $category;
@@ -12,6 +13,7 @@ class Product
     public $price;
 
     public function __construct(
+        $id = '',
         $title = '',
         $description = '',
         $category = '',
@@ -19,6 +21,7 @@ class Product
         $currentStock = '',
         $price = ''
     ) {
+        $this->porductId = $id;
         $this->title = $title;
         $this->description = $description;
         $this->category = $category;

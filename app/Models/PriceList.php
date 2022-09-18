@@ -8,4 +8,8 @@ class PriceList extends Model
 {
     protected $table = 'TLISTASPRECIOS';
     protected $primaryKey = 'IDLISTA';
+
+    public function percentage() {
+        return $this->PORCE;
+    }
 }

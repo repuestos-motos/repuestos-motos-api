@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Seller;
 use App\Http\ResponseModels\User as UserResponse;
 use App\Http\ResponseModels\SellerUser as SellerUserResponse;
+use App\Models\Client;
 
 class AuthenticationController extends Controller
 {
@@ -19,7 +20,7 @@ class AuthenticationController extends Controller
         try {
             $userName = $request->input('userName');
             $password = $request->input('password');
-            $user = User::where('NOMUSUARIO', $userName)
+            $user = Client::where('NOMUSUARIO', $userName)
                 ->where('CLAVE', $password)
                 ->where('HABILITAWEB', 'S')
                 ->first();
