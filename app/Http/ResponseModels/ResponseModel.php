@@ -20,11 +20,11 @@ class ResponseModel
     }
 
     public static function GetErrorResponse($data = null, $message = '', $statusCode = 500) {
-        return response()->json(new ResponseModel($message, $data), $statusCode);
+        return response()->json(new ResponseModel($data, $message), $statusCode);
     }
 
     public static function GetSuccessfullResponse($data) {
-        return response()->json($data, 200);
+        return response()->json(new ResponseModel($data), 200);
     }
 
 }

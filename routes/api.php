@@ -29,12 +29,16 @@ Route::prefix('authentication')->group(function() {
 
 Route::prefix('products')->group(function() {
     Route::get('list', 'App\Http\Controllers\ProductController@GetProducts');
+    Route::get('detail/{id}', 'App\Http\Controllers\ProductController@GetProduct');
         //->middleware('authentication.check');
     Route::get('image', 'App\Http\Controllers\ProductController@GetProductImage');
 });
 
 Route::prefix('orders')->group(function() {
-    Route::post('', 'App\Http\Controllers\ProductController@CreateOrder');
+    Route::post('', 'App\Http\Controllers\OrderController@CreateOrder');
         //->middleware('authentication.check');
-    Route::get('image', 'App\Http\Controllers\ProductController@GetProductImage');
+    Route::get('list/{clientId}', 'App\Http\Controllers\OrderController@OrdersList');
+    Route::get('detail/{orderId}', 'App\Http\Controllers\OrderController@OrderDetail');
+
+
 });
