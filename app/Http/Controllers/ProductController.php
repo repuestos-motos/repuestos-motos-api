@@ -6,6 +6,7 @@ use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\ResponseModels\ResponseModel;
+use App\Models\Category;
 use App\Models\Client;
 use App\Models\Product;
 
@@ -25,6 +26,16 @@ class ProductController extends Controller
             if (!$product->FOTO || $product->FOTO == "NO") {
                 return ResponseModel::GetErrorResponse(null, 'Imagen no encontrada', 404);
             }
+
+            /// TEST DE DEVOLVER IMAGEN DIRECTA
+
+            return response(
+                base64_decode($product->FOTO),
+                200,
+                [
+                    'Content-Type' => 'image/*'
+                ]
+            );
     
             return response('data:image/*;base64,' . $product->FOTO, 200);
         } catch (Throwable $e) {
@@ -56,6 +67,25 @@ class ProductController extends Controller
             return ResponseModel::GetErrorResponse(
                 null,
                 'Se produjo un error al obtener el listado',
+                500
+            ); 
+        }
+    }
+
+    /**
+     * Return a list of categories
+     */
+    public function GetProductsCategories(Request $request) {
+        try {
+            // Get all categories
+            return ResponseModel::GetSuccessfullResponse(
+                Category::all()
+            );
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return ResponseModel::GetErrorResponse(
+                null,
+                'Se produjo un error al obtener las categorías de productos',
                 500
             ); 
         }

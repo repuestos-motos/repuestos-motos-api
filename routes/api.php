@@ -28,6 +28,7 @@ Route::prefix('authentication')->group(function() {
 });
 
 Route::prefix('products')->group(function() {
+    Route::get('categories', 'App\Http\Controllers\ProductController@GetProductsCategories');
     Route::get('list', 'App\Http\Controllers\ProductController@GetProducts');
     Route::get('detail/{id}', 'App\Http\Controllers\ProductController@GetProduct');
         //->middleware('authentication.check');

@@ -25,7 +25,8 @@ class Product extends Model implements JsonSerializable
             "category" => $this->category(),
             "brandName" => $this->brandName(),
             "currentStock" => $this->currentStock(),
-            "price" => $this->price()
+            "price" => $this->price(),
+            "hasImage" => $this->hasImage()
         ];
         return $stdObject;
     }
@@ -83,6 +84,9 @@ class Product extends Model implements JsonSerializable
             $this->COSTO = $value;
         }
         return $this->COSTO;
+    }
+    public function hasImage() {
+        return $this->FOTO && $this->FOTO != "NO";
     }
 
     /**
