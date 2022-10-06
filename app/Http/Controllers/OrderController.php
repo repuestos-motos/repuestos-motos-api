@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Http\ResponseModels\ResponseModel;
 use App\Models\Client;
 use App\Models\Order;
+use App\Models\PriceList;
 use App\Models\Product;
 use App\Models\Seller;
 
@@ -25,8 +26,16 @@ class OrderController extends Controller
             $response = (object)[];
             
             DB::beginTransaction();
-            if (!Client::clientExist($order->clientId)) {
+            // Get user
+            $user = Client::find($order->clientId);
+            if (!$user) {
                 throw new HttpException(404, 'Cliente no válido');
+            }
+            // Get Price List
+            $priceList = PriceList::find($user->IDLISTA);
+            $discountPercentage = 0;
+            if ($priceList) {
+                $discountPercentage = $priceList->percentage();
             }
             if (isset($order->sellerId) && !Seller::sellerExist($order->sellerId)) {
                 throw new HttpException(404, 'Vendedor no válido');
@@ -37,6 +46,7 @@ class OrderController extends Controller
                 foreach ($order->orderItems as $orderItem) {
                     // Get the product
                     $product = Product::getProduct($orderItem->productId);
+                    $product->calculateSalesPrice($discountPercentage);
                     if ($product === null) {
                         throw new HttpException(404, 'Su pedido contiene productos inexistentes');
                     }
@@ -47,7 +57,8 @@ class OrderController extends Controller
                         $product->productId(),
                         $product->title(),
                         $orderItem->quantity,
-                        $product->price()
+                        $product->price(),
+                        $product->salesPrice()
                     );
                     // Modifies total amount of order
                     $newOrder->totalAmount($newOrder->totalAmount() + round($orderItem->quantity * $product->price(), 2));

@@ -20,7 +20,7 @@ class Order extends Model implements JsonSerializable
     private static $ORIGIN = 'WEB';
     private static $STATE = 1;
 
-    private array $orderItems = [];
+    private $orderItems = [];
 
     /**
      * Returns JSON object representation
@@ -106,6 +106,8 @@ class Order extends Model implements JsonSerializable
             $newOrder->origin(self::$ORIGIN);
             if (isset($order->sellerId)) {
                 $newOrder->sellerId($order->sellerId);
+            } else {
+                $newOrder->sellerId(0);
             }
             $newOrder->save();
             $newOrder->refresh();
@@ -119,7 +121,7 @@ class Order extends Model implements JsonSerializable
     /**
      * Add items to the OrderItems array and stores them in the data base 
      */
-    public function AddItem($productId, $description, $quantity, $price) {
+    public function AddItem($productId, $description, $quantity, $price, $cost) {
         try {
             $newItem = new OrderItem();
             $newItem->orderId($this->orderId());
@@ -128,6 +130,9 @@ class Order extends Model implements JsonSerializable
             $newItem->quantity($quantity);
             $newItem->unitPrice($price);
             $newItem->totalAmount(round($quantity * $price, 2));
+            $newItem->unitPriceNoDiscount($cost);
+            $newItem->totalAmountNoDiscount(round($quantity * $cost, 2));
+            $newItem->discountAmount($newItem->totalAmountNoDiscount() - $newItem->totalAmount());
             $newItem->state(1);
             $newItem->save();
             $this->orderItems[] = $newItem;
@@ -143,8 +148,7 @@ class Order extends Model implements JsonSerializable
      */
     public function LoadItems() {
         $this->orderItems = OrderItem::where('IDPEDIDO', '=', $this->orderId())
-            ->get()
-            ->toArray();
+            ->get();
     }
 
     /**
@@ -154,7 +158,7 @@ class Order extends Model implements JsonSerializable
      */
     public static function GetOrders($clientId) {
         return Order::where('IDCLIENTE', '=', $clientId)
-            ->orderBy('FECHA', 'desc')
+            ->orderBy('IDPEDIDO', 'desc')
             ->get();
     }
 }

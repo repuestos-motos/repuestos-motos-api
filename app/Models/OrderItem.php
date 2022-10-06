@@ -74,6 +74,27 @@ class OrderItem extends Model implements JsonSerializable
         return $this->PRECIUNITARIO;
     }
 
+    public function unitPriceNoDiscount($value = null) {
+        if (isset($value)) {
+            $this->PRECIOUNITISNDESC = $value;
+        }
+        return $this->PRECIOUNITISNDESC;
+    }
+
+    public function totalAmountNoDiscount($value = null) {
+        if (isset($value)) {
+            $this->TOTALSINDESC = $value;
+        }
+        return $this->TOTALSINDESC;
+    }
+
+    public function discountAmount($value = null) {
+        if (isset($value)) {
+            $this->IMPORTEDESC = $value;
+        }
+        return $this->IMPORTEDESC;
+    }
+
     public function totalAmount($value = null) {
         if (isset($value)) {
             $this->TOTAL = $value;

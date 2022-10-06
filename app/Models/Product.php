@@ -12,6 +12,7 @@ class Product extends Model implements JsonSerializable
     protected $table = 'TARTICULOS';
     protected $primaryKey = 'IDARTICULO';
     public $timestamps = false;
+    private $calculatedPrice = 0;
 
     /**
      * Returns JSON object representation
@@ -73,11 +74,17 @@ class Product extends Model implements JsonSerializable
         }
         return $this->STOCK;
     }
-    public function price($value = null) {
+    public function salesPrice($value = null) {
         if ($value) {
             $this->PRECIOVENTA = $value;
         }
         return $this->PRECIOVENTA;
+    }
+    public function price($value = null) {
+        if ($value) {
+            $this->calculatedPrice = $value;
+        }
+        return $this->calculatedPrice;
     }
     public function cost($value = null) {
         if ($value) {
@@ -125,11 +132,20 @@ class Product extends Model implements JsonSerializable
         $productList = [];
         foreach($products as $product) {
             if ($priceList !== null) {
-                $product->price($product->cost() * (1 + $priceList->percentage() / 100));
+                $product->calculateSalesPrice($priceList->percentage());
             }
             $productList[] = $product;
         }
         return $productList;
+    }
+
+    /**
+     * @param priceListPercentage number representing the percentaje of discount to apply to calculate the product price. i.e.: 20
+     */
+    public function calculateSalesPrice($priceListPercentage) {
+        $this->price(
+            round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
+        );
     }
 
     /**
