@@ -72,6 +72,22 @@ class ProductController extends Controller
         }
     }
 
+    public function GetClientList(Request $request) {
+        try {
+            // Get client List
+            return ResponseModel::GetSuccessfullResponse(
+                Client::all()
+            );
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return ResponseModel::GetErrorResponse(
+                null,
+                'Se produjo un error al obtener el listado de clientes',
+                500
+            ); 
+        }
+    }
+
     /**
      * Return a list of categories
      */

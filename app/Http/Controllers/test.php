@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\User;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class test extends Controller
@@ -14,9 +13,7 @@ class test extends Controller
     }
 
     public static function TestDBAction(Request $request) {
-        $user = [];
-        
-        // $user = Product::GetProductsListWithPrices(1);
+        $user = Client::all();
         return response()->json($user);
     }
 }
