@@ -19,7 +19,7 @@ class Authentication
         $response = $next($request);
         if ($response->getStatusCode() === 200) {
             $token = JWToken::CreateToken();
-            return $response->header("Authorization", $token)->header('Access-Control-Expose-Headers', 'Authorization');
+            return $response->header("accessToken", $token)->header('Access-Control-Expose-Headers', 'accessToken');
         }
         return $response;
     }

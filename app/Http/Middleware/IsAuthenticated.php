@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 
 class IsAuthenticated
 {
@@ -16,9 +18,13 @@ class IsAuthenticated
      */
     public function handle(Request $request, Closure $next)
     {
-        if (JWToken::VerifyToken($request->header('Authorization'))) {
+        Log::error('TOKEN: ' . $request->header('accessToken')
+            . ' - Headers: ' . json_encode($request->headers->all())
+        );
+
+        if (JWToken::VerifyToken($request->header('accessToken'))) {
             $response = $next($request);
-            return $response->header('Authorization', JWToken::CreateToken())->header('Access-Control-Expose-Headers', 'Authorization');
+            return $response->header('accessToken', JWToken::CreateToken())->header('Access-Control-Expose-Headers', 'accessToken');
         }
         return response('', 403);
     }
