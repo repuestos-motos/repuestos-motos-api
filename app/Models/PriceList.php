@@ -12,4 +12,8 @@ class PriceList extends Model
     public function percentage() {
         return $this->PORCE;
     }
+
+    public function isDiscount() {
+        return $this->APLICA === '-';
+    }
 }

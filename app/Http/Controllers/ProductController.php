@@ -27,8 +27,6 @@ class ProductController extends Controller
                 return ResponseModel::GetErrorResponse(null, 'Imagen no encontrada', 404);
             }
 
-            /// TEST DE DEVOLVER IMAGEN DIRECTA
-
             return response(
                 base64_decode($product->FOTO),
                 200,

@@ -132,7 +132,7 @@ class Product extends Model implements JsonSerializable
         $productList = [];
         foreach($products as $product) {
             if ($priceList !== null) {
-                $product->calculateSalesPrice($priceList->percentage());
+                $product->calculateSalesPrice($priceList->percentage(), $priceList->isDiscount());
             }
             $productList[] = $product;
         }
@@ -142,10 +142,16 @@ class Product extends Model implements JsonSerializable
     /**
      * @param priceListPercentage number representing the percentaje of discount to apply to calculate the product price. i.e.: 20
      */
-    public function calculateSalesPrice($priceListPercentage) {
-        $this->price(
-            round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
-        );
+    public function calculateSalesPrice($priceListPercentage, $discount = false) {
+        if ($discount) {
+            $this->price(
+                round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
+            );
+        } else {
+            $this->price(
+                round($this->salesPrice() * (1 + ($priceListPercentage / 100)), 2)
+            );
+        }
     }
 
     /**
