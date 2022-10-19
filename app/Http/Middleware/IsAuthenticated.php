@@ -26,6 +26,6 @@ class IsAuthenticated
             $response = $next($request);
             return $response->header('accessToken', JWToken::CreateToken())->header('Access-Control-Expose-Headers', 'accessToken');
         }
-        return response('', 403);
+        return response('', 401);
     }
 }

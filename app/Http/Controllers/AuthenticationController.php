@@ -37,7 +37,7 @@ class AuthenticationController extends Controller
                     $user->IIBB
                 );
             } else {
-                return response('', 403);
+                return response('', 400);
             }
             return response()->json($user);
         } catch (Exception $e) {
@@ -66,7 +66,7 @@ class AuthenticationController extends Controller
                     $user->COMISION
                 );
             } else {
-                return response('', 403);
+                return response('', 400);
             }
             return response()->json($user);
         } catch (Exception $e) {

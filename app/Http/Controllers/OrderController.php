@@ -10,12 +10,29 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Http\ResponseModels\ResponseModel;
 use App\Models\Client;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\PriceList;
 use App\Models\Product;
 use App\Models\Seller;
 
 class OrderController extends Controller
 {
+
+    public function GetAllStatusCodes(Request $request) {
+        try {
+            return ResponseModel::GetSuccessfullResponse(
+                OrderStatus::all()
+            );
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+            return ResponseModel::GetErrorResponse(
+                null,
+                'Se produjo un error obtener los estados',
+                500
+            );
+        }
+    }
+
     /**
      * Creates an order and stores it in the database
      */
