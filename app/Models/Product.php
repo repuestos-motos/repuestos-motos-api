@@ -95,6 +95,9 @@ class Product extends Model implements JsonSerializable
     public function hasImage() {
         return $this->FOTO && $this->FOTO != "NO";
     }
+    public function discount() {
+        return $this->DESCUENTO;
+    }
 
     /**
      * Return all the products including it's brands and categories
@@ -132,7 +135,7 @@ class Product extends Model implements JsonSerializable
         $productList = [];
         foreach($products as $product) {
             if ($priceList !== null) {
-                $product->calculateSalesPrice($priceList->percentage(), $priceList->isDiscount());
+                $product->calculateSalesPrice($priceListId, $priceList->percentage());
             }
             $productList[] = $product;
         }
@@ -140,17 +143,29 @@ class Product extends Model implements JsonSerializable
     }
 
     /**
-     * @param priceListPercentage number representing the percentaje of discount to apply to calculate the product price. i.e.: 20
+     * @param int priceListPercentage number representing the percentaje of discount to apply to calculate the product price. i.e.: 20
+     * @param boolean applyFromList boolean that indicates if we have to appy the discount
+     * @param 
      */
-    public function calculateSalesPrice($priceListPercentage, $discount = false) {
-        if ($discount) {
-            $this->price(
-                round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
-            );
-        } else {
-            $this->price(
-                round($this->salesPrice() * (1 + ($priceListPercentage / 100)), 2)
-            );
+    public function calculateSalesPrice($priceListId, $priceListPercentage) {
+        switch($priceListId) {
+            case 2:
+                // Appy discount based on product field
+                $this->price(
+                    round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
+                );
+                break;
+            case 3:
+                // Apply surcharge based on price list field
+                $this->price(
+                    round($this->salesPrice() * (1 + ($this->discount() / 100)), 2)
+                );
+                break;
+            default:
+                // No appy any discount or surcharge
+                $this->price(
+                    round($this->salesPrice(), 2)
+                );
         }
     }
 
