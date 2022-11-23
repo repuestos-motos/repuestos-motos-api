@@ -23,4 +23,8 @@ class Category extends Model implements JsonSerializable
         return $stdObject;
     }
 
+    public static function GetCategories() {
+        return Category::where('IDRUBRO', '>', 2)->get();
+    }
+
 }

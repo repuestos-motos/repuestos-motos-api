@@ -93,7 +93,7 @@ class ProductController extends Controller
         try {
             // Get all categories
             return ResponseModel::GetSuccessfullResponse(
-                Category::all()
+                Category::GetCategories()
             );
         } catch (Throwable $e) {
             Log::error($e->getMessage());
