@@ -23,8 +23,8 @@ class ResponseModel
         return response()->json(new ResponseModel($data, $message), $statusCode);
     }
 
-    public static function GetSuccessfullResponse($data) {
-        return response()->json(new ResponseModel($data), 200);
+    public static function GetSuccessfullResponse($data, $headers = []) {
+        return response()->json(new ResponseModel($data), 200, $headers);
     }
 
 }

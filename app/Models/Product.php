@@ -27,7 +27,7 @@ class Product extends Model implements JsonSerializable
             "brandName" => $this->brandName(),
             "currentStock" => $this->currentStock(),
             "price" => $this->price(),
-            "hasImage" => $this->hasImage()
+            "hasImage" => true
         ];
         return $stdObject;
     }
@@ -92,11 +92,25 @@ class Product extends Model implements JsonSerializable
         }
         return $this->COSTO;
     }
-    public function hasImage() {
-        return $this->FOTO && $this->FOTO != "NO";
-    }
     public function discount() {
         return $this->DESCUENTO;
+    }
+
+
+    private static function productsSelect() {
+        return Product::select(
+            'TARTICULOS.IDARTICULO',
+            'TARTICULOS.DESCRIPCION',
+            'TARTICULOS.PRECIOVENTA',
+            'TARTICULOS.STOCKINICIA',
+            'TARTICULOS.STOCKVENTA',
+            'TARTICULOS.STOCKCOMPRA',
+            'TARTICULOS.STOCKBAJA',
+            'TARTICULOS.DESCUENTO',
+            'TMARCAS.DESCRIPCION AS MARCA',
+            'TRUBROS.DESCRIPCION AS CATEGORIA')
+            ->leftJoin('TMARCAS', 'TMARCAS.IDMARCA', '=', 'TARTICULOS.IDMARCA')
+            ->leftJoin('TRUBROS', 'TRUBROS.IDRUBRO', '=', 'TARTICULOS.IDRUBRO');
     }
 
     /**
@@ -104,12 +118,7 @@ class Product extends Model implements JsonSerializable
      * @return Collection Collection of Products
      */
     public static function getProducts() {
-        return Product::select(
-            'TARTICULOS.*',
-            'TMARCAS.DESCRIPCION AS MARCA',
-            'TRUBROS.DESCRIPCION AS CATEGORIA')
-            ->leftJoin('TMARCAS', 'TMARCAS.IDMARCA', '=', 'TARTICULOS.IDMARCA')
-            ->leftJoin('TRUBROS', 'TRUBROS.IDRUBRO', '=', 'TARTICULOS.IDRUBRO')
+        return self::productsSelect()
             ->get();
     }
 
@@ -119,13 +128,8 @@ class Product extends Model implements JsonSerializable
      * @return Product Returns the product that matches the id or null
      */
     public static function getProduct($id) {
-        return Product::select(
-            'TARTICULOS.*',
-            'TMARCAS.DESCRIPCION AS MARCA',
-            'TRUBROS.DESCRIPCION AS CATEGORIA')
+        return self::productsSelect()
             ->where('IDARTICULO', '=', $id)
-            ->leftJoin('TMARCAS', 'TMARCAS.IDMARCA', '=', 'TARTICULOS.IDMARCA')
-            ->leftJoin('TRUBROS', 'TRUBROS.IDRUBRO', '=', 'TARTICULOS.IDRUBRO')
             ->first();
     }
 
