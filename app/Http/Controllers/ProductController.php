@@ -31,7 +31,8 @@ class ProductController extends Controller
                 base64_decode($product->FOTO),
                 200,
                 [
-                    'Content-Type' => 'image/*'
+                    'Content-Type' => 'image/*',
+                    'Cache-Control' => 'max-age=3600'
                 ]
             );
     
