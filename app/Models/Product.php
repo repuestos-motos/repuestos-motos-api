@@ -107,6 +107,8 @@ class Product extends Model implements JsonSerializable
             'TARTICULOS.STOCKCOMPRA',
             'TARTICULOS.STOCKBAJA',
             'TARTICULOS.DESCUENTO',
+            'TARTICULOS.STOCK',
+            'TARTICULOS.DETALLE',
             'TMARCAS.DESCRIPCION AS MARCA',
             'TRUBROS.DESCRIPCION AS CATEGORIA')
             ->leftJoin('TMARCAS', 'TMARCAS.IDMARCA', '=', 'TARTICULOS.IDMARCA')
