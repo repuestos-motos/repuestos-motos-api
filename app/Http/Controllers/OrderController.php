@@ -50,10 +50,6 @@ class OrderController extends Controller
             }
             // Get Price List
             $priceList = PriceList::find($user->IDLISTA);
-            $discountPercentage = 0;
-            if ($priceList) {
-                $discountPercentage = $priceList->percentage();
-            }
             if (isset($order->sellerId) && !Seller::sellerExist($order->sellerId)) {
                 throw new HttpException(404, 'Vendedor no válido');
             }
@@ -63,7 +59,7 @@ class OrderController extends Controller
                 foreach ($order->orderItems as $orderItem) {
                     // Get the product
                     $product = Product::getProduct($orderItem->productId);
-                    $product->calculateSalesPrice($discountPercentage);
+                    $product->calculateSalesPrice($priceList);
                     if ($product === null) {
                         throw new HttpException(404, 'Su pedido contiene productos inexistentes');
                     }

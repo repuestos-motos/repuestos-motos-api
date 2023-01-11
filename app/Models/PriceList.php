@@ -9,6 +9,10 @@ class PriceList extends Model
     protected $table = 'TLISTASPRECIOS';
     protected $primaryKey = 'IDLISTA';
 
+    public function getId() {
+        return $this->IDLISTA;
+    }
+
     public function percentage() {
         return $this->PORCE;
     }

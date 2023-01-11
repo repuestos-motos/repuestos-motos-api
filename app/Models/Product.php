@@ -134,39 +134,29 @@ class Product extends Model implements JsonSerializable
         $priceList = PriceList::find($priceListId);
         $productList = [];
         foreach($products as $product) {
-            if ($priceList !== null) {
-                $product->calculateSalesPrice($priceListId, $priceList->percentage());
-            }
+            $product->calculateSalesPrice($priceList);
             $productList[] = $product;
         }
         return $productList;
     }
 
     /**
-     * @param int priceListPercentage number representing the percentaje of discount to apply to calculate the product price. i.e.: 20
-     * @param boolean applyFromList boolean that indicates if we have to appy the discount
-     * @param 
+     * Generates the price for the current product taking into accout the priceList
+     * @param PriceList Price List Object
      */
-    public function calculateSalesPrice($priceListId, $priceListPercentage) {
-        switch($priceListId) {
-            case 2:
-                // Appy discount based on product field
-                $this->price(
-                    round($this->salesPrice() * (1 - ($priceListPercentage / 100)), 2)
-                );
-                break;
-            case 3:
-                // Apply surcharge based on price list field
-                $this->price(
-                    round($this->salesPrice() * (1 + ($this->discount() / 100)), 2)
-                );
-                break;
-            default:
-                // No appy any discount or surcharge
-                $this->price(
-                    round($this->salesPrice(), 2)
-                );
+    public function calculateSalesPrice($priceList) {
+        $calculatedPrice = $this->salesPrice();
+        if ($priceList) {
+            if ($priceList->isDiscount()) {
+                $calculatedPrice = round($calculatedPrice * (1 - $priceList->percentage() / 100), 2);
+            } else {
+                $calculatedPrice = round($calculatedPrice * (1 + $priceList->percentage() / 100), 2);
+            }
         }
+        if ($this->discount() > 0) {
+            $calculatedPrice = round($calculatedPrice * (1 - $this->discount() / 100), 2);
+        }
+        $this->price($calculatedPrice);
     }
 
     /**
