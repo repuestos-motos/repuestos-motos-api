@@ -24,7 +24,9 @@ class Category extends Model implements JsonSerializable
     }
 
     public static function GetCategories() {
-        return Category::where('IDRUBRO', '>', 2)->get();
+        return Category::where('IDRUBRO', '>', 2)
+            ->orderBy('DESCRIPCION')
+            ->get();
     }
 
 }

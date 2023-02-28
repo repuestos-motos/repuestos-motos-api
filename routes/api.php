@@ -32,7 +32,7 @@ Route::prefix('products')->group(function() {
     Route::get('list', 'App\Http\Controllers\ProductController@GetProducts')->middleware('authentication.check');
     Route::get('client-list', 'App\Http\Controllers\ProductController@GetClientList')->middleware('authentication.check');
     Route::get('detail/{id}', 'App\Http\Controllers\ProductController@GetProduct')->middleware('authentication.check');
-    Route::get('image', 'App\Http\Controllers\ProductController@GetProductImage');
+    Route::middleware(['throttle:1500,1'])->get('image', 'App\Http\Controllers\ProductController@GetProductImage');
 });
 
 Route::prefix('orders')->group(function() {
