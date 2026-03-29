@@ -40,5 +40,4 @@ Route::prefix('orders')->group(function() {
     Route::get('status', 'App\Http\Controllers\OrderController@GetAllStatusCodes')->middleware('authentication.check');
     Route::get('list/{clientId}', 'App\Http\Controllers\OrderController@OrdersList')->middleware('authentication.check');
     Route::get('detail/{orderId}', 'App\Http\Controllers\OrderController@OrderDetail')->middleware('authentication.check');
-
 });
